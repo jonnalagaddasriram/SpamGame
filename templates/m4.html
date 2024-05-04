@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Email Detection</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px; 
+        }
+        .justify-content-center {
+            justify-content: center !important;
+        }
+        .m-0 {
+            margin: 0 !important; 
+        }
+        @media (min-width: 768px) {
+            .col-md {
+                flex-basis: 0;
+                flex-grow: 1;
+                max-width: 100%; }
+            .col-md-auto {
+                flex: 0 0 auto;
+                width: auto;
+                max-width: none; }
+            .col-md-1 {
+                flex: 0 0 6.25%;
+                max-width: 6.25%; }
+            .col-md-2 {
+                flex: 0 0 12.5%;
+                max-width: 12.5%; }
+            .col-md-3 {
+                flex: 0 0 18.75%;
+                max-width: 18.75%; }
+            .col-md-4 {
+                flex: 0 0 25%;
+                max-width: 25%; }
+            .col-md-5 {
+                flex: 0 0 31.25%;
+                max-width: 31.25%; }
+            .col-md-6 {
+                flex: 0 0 37.5%;
+                max-width: 37.5%; }
+            .col-md-7 {
+                flex: 0 0 43.75%;
+                max-width: 43.75%; }
+            .col-md-8 {
+                flex: 0 0 50%;
+                max-width: 50%; }
+            .col-md-9 {
+                flex: 0 0 56.25%;
+                max-width: 56.25%; }
+            .col-md-10 {
+                flex: 0 0 62.5%;
+                max-width: 62.5%; }
+            .col-md-11 {
+                flex: 0 0 68.75%;
+                max-width: 68.75%; }
+            .col-md-12 {
+                flex: 0 0 75%;
+                max-width: 75%; }
+            .col-md-13 {
+                flex: 0 0 81.25%;
+                max-width: 81.25%; }
+            .col-md-14 {
+                flex: 0 0 87.5%;
+                max-width: 87.5%; }
+            .col-md-15 {
+                flex: 0 0 93.75%;
+                max-width: 93.75%; }
+            .col-md-16 {
+                flex: 0 0 100%;
+                max-width: 100%; }
+            .order-md-first {
+                order: -1; }
+            .order-md-last {
+                order: 17; }
+            .order-md-0 {
+                order: 0; }
+            .order-md-1 {
+                order: 1; }
+            .order-md-2 {
+                order: 2; }
+            .order-md-3 {
+                order: 3; }
+            .order-md-4 {
+                order: 4; }
+            .order-md-5 {
+                order: 5; }
+            .order-md-6 {
+                order: 6; }
+            .order-md-7 {
+                order: 7; }
+            .order-md-8 {
+                order: 8; }
+            .order-md-9 {
+                order: 9; }
+            .order-md-10 {
+                order: 10; }
+            .order-md-11 {
+                order: 11; }
+            .order-md-12 {
+                order: 12; }
+            .order-md-13 {
+                order: 13; }
+            .order-md-14 {
+                order: 14; }
+            .order-md-15 {
+                order: 15; }
+            .order-md-16 {
+                order: 16; }
+            .offset-md-0 {
+                margin-left: 0; }
+            .offset-md-1 {
+                margin-left: 6.25%; }
+            .offset-md-2 {
+                margin-left: 12.5%; }
+            .offset-md-3 {
+                margin-left: 18.75%; }
+            .offset-md-4 {
+                margin-left: 25%; }
+            .offset-md-5 {
+                margin-left: 31.25%; }
+            .offset-md-6 {
+                margin-left: 37.5%; }
+            .offset-md-7 {
+                margin-left: 43.75%; }
+            .offset-md-8 {
+                margin-left: 50%; }
+            .offset-md-9 {
+                margin-left: 56.25%; }
+            .offset-md-10 {
+                margin-left: 62.5%; }
+            .offset-md-11 {
+                margin-left: 68.75%; }
+            .offset-md-12 {
+                margin-left: 75%; }
+            .offset-md-13 {
+                margin-left: 81.25%; }
+            .offset-md-14 {
+                margin-left: 87.5%; }
+            .offset-md-15 {
+                margin-left: 93.75%; } 
+        }
+
+        .col-xl,
+        .col-xl-auto, .col-xl-16, .col-xl-15, .col-xl-14, .col-xl-13, .col-xl-12, .col-xl-11, .col-xl-10, .col-xl-9, .col-xl-8, .col-xl-7, .col-xl-6, .col-xl-5, .col-xl-4, .col-xl-3, .col-xl-2, .col-xl-1, .col-lg,
+        .col-lg-auto, .col-lg-16, .col-lg-15, .col-lg-14, .col-lg-13, .col-lg-12, .col-lg-11, .col-lg-10, .col-lg-9, .col-lg-8, .col-lg-7, .col-lg-6, .col-lg-5, .col-lg-4, .col-lg-3, .col-lg-2, .col-lg-1, .col-md,
+        .col-md-auto, .col-md-16, .col-md-15, .col-md-14, .col-md-13, .col-md-12, .col-md-11, .col-md-10, .col-md-9, .col-md-8, .col-md-7, .col-md-6, .col-md-5, .col-md-4, .col-md-3, .col-md-2, .col-md-1, .col-sm,
+        .col-sm-auto, .col-sm-16, .col-sm-15, .col-sm-14, .col-sm-13, .col-sm-12, .col-sm-11, .col-sm-10, .col-sm-9, .col-sm-8, .col-sm-7, .col-sm-6, .col-sm-5, .col-sm-4, .col-sm-3, .col-sm-2, .col-sm-1, .col,
+        .col-auto, .col-16, .col-15, .col-14, .col-13, .col-12, .col-11, .col-10, .col-9, .col-8, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1 {
+            position: relative;
+            width: 100%;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px; 
+        } 
+        .col-4 {
+            flex: 0 0 25%;
+            max-width: 25%; 
+        }  
+        .col-12 {
+            flex: 0 0 75%;
+            max-width: 75%; 
+        }
+        .col-16 {
+            flex: 0 0 100%;
+            max-width: 100%; 
+        }
+        .col-sm-16 {
+            flex: 0 0 100%;
+            max-width: 100%; 
+        }
+        .mb-4,
+        .my-4 {
+            margin-bottom: 1.5rem !important; 
+        }
+
+        .ml-4,
+        .mx-4 {
+            margin-left: 1.5rem !important; 
+        }
+        .m-3 {
+            margin: 1rem !important; }
+
+        .mt-3,
+        .my-3 {
+            margin-top: 1rem !important; }
+
+        #DIV_6 {
+            color: white;
+            display: inline-block;
+            height: 46px;
+            text-align: center;
+            text-decoration: none solid white;
+            width: 46px;
+            background: #4dd0e1 none repeat scroll 0% 0%/auto padding-box border-box;
+            border: 0px none white;
+            border-radius: 50% 50% 50% 50%;
+            font: normal normal 300 normal 26px / 46px Roboto, "Helvetica Neue", sans-serif;
+            outline: white none 0px;
+            top: -16px;
+            position: relative; 
+        }
+
+            /*#DIV_6*/
+        #DIV_7 {
+            color: rgba(0, 0, 0, 0.87);
+            display: inline-block;
+            height: 40px;
+            text-decoration: none solid rgba(0, 0, 0, 0.87);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border: 0px none rgba(0, 0, 0, 0.87);
+            font: normal normal 400 normal 14px / 20px Roboto, "Helvetica Neue", sans-serif;
+            outline: rgba(0, 0, 0, 0.87) none 0px;
+            padding: 2px 0px 0px 12px; 
+        }
+
+            /*#DIV_7*/
+        .column_style {
+            font: normal normal 400 normal 14px / 20px Roboto, "Helvetica Neue", sans-serif;
+            outline: rgba(0, 0, 0, 0.87) none 0px; 
+        }
+        .subject {
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.8);
+            font: Roboto, "Helvetica Neue", sans-serif;
+            font-size: 18px;
+            margin-bottom: 1.5rem; 
+        }
+        .column_style {
+            font: normal normal 400 normal 14px / 20px Roboto, "Helvetica Neue", sans-serif;
+            outline: rgba(0, 0, 0, 0.87) none 0px; 
+        }
+        #SPAN_8 {
+            color: #212121;
+            text-decoration: none solid #212121;
+            white-space: nowrap;
+        }
+
+            /*#SPAN_8*/
+        #SPAN_9 {
+            color: rgba(0, 0, 0, 0.87);
+            opacity: 0.4;
+            text-decoration: none solid rgba(0, 0, 0, 0.87);
+            white-space: nowrap;
+            border: 0px none rgba(0, 0, 0, 0.87);
+            outline: rgba(0, 0, 0, 0.87) none 0px; 
+        }
+
+            /*#SPAN_9*/
+        #SPAN_10 {
+            clear: left;
+            color: rgba(0, 0, 0, 0.87);
+            opacity: 0.4;
+            text-decoration: none solid rgba(0, 0, 0, 0.87);
+            border: 0px none rgba(0, 0, 0, 0.87);
+            outline: rgba(0, 0, 0, 0.87) none 0px;
+            display: block; 
+        }
+        #EMAIL-CONTENT-DROPBOX_15 {
+            color: rgba(0, 0, 0, 0.87);
+            display: block;
+            text-decoration: none solid rgba(0, 0, 0, 0.87);
+            column-rule-color: rgba(0, 0, 0, 0.87);
+            perspective-origin: 484px 256px;
+            transform-origin: 484px 256px;
+            caret-color: rgba(0, 0, 0, 0.87);
+            border: 0px none rgba(0, 0, 0, 0.87);
+            outline: rgba(0, 0, 0, 0.87) none 0px; 
+        }
+
+        #MAT-CARD_1 {
+            bottom: 0px;
+            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0px 0px, rgba(0, 0, 0, 0.14) 0px 0px 0px 0px, rgba(0, 0, 0, 0.12) 0px 0px 0px 0px;
+            box-sizing: border-box;
+            color: rgba(0, 0, 0, 0.87);
+            display: block;
+            left: 0px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            text-decoration: none solid rgba(0, 0, 0, 0.87);
+            background: white none repeat scroll 0% 0%/auto padding-box border-box;
+            border: 0px none rgba(0, 0, 0, 0.87);
+            border-radius: 3px 3px 3px 3px;
+            outline: rgba(0, 0, 0, 0.87) none 0px;
+            padding: 16px;
+            transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+        }
+
+            /*#MAT-CARD_1*/
+        #MAT-CARD_1:after {
+            color: rgba(0, 0, 0, 0.87);
+            text-decoration: none solid rgba(0, 0, 0, 0.87);
+            column-rule-color: rgba(0, 0, 0, 0.87);
+            caret-color: rgba(0, 0, 0, 0.87);
+            border: 0px none rgba(0, 0, 0, 0.87);
+            outline: rgba(0, 0, 0, 0.87) none 0px; 
+        }
+        #CARD-BODY-CONTENT_2 {
+            color: rgba(0, 0, 0, 0.4);
+            border: 0px none rgba(0, 0, 0, 0.87);
+            outline: rgba(0, 0, 0, 0.87) none 0px; 
+        }
+        .email_body_wrapper {
+            box-sizing: border-box;
+            color: #616161;
+            text-align: left;
+            text-decoration: none solid #616161;
+            font-family: Arial;
+            outline: #616161 none 0px;
+            padding: 10px;
+            font-size: 15px;
+            line-height: 1.9rem;
+            margin: 20px;
+            display: block; }
+            @media (min-width: 768px) {
+                .email_body_wrapper {
+                    line-height: 0.9rem; } }
+        .email_body_wrapper h1 {
+                font-family: Arial, sans-serif;
+                font-size: 32px;
+                margin-bottom: 2rem; 
+        }
+        input.highlightchoice {
+            opacity: 0;
+            position: absolute; }
+
+        label.highlightLabel {
+        margin: 0;
+        position: relative;
+        z-index: 1; }
+            label.highlightLabel:after {
+                content: "+";
+                width: 20px;
+                height: 20px;
+                font-size: 18px;
+                line-height: 19px;
+                padding-bottom: 3px;
+                background: white;
+                display: block;
+                position: absolute;
+                border-radius: 100px;
+                box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+                border: 1px solid #ccc;
+                color: #ccc;
+                text-align: center;
+                top: -15px;
+                right: -15px; }
+            label.highlightLabel:before {
+                width: 0%;
+                transition: width 0.5s ease-out;
+                display: block;
+                border-bottom: 3px solid transparent;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                content: ""; }
+            label.highlightLabel:hover:after, input.highlightchoice:focus + label.highlightLabel:after {
+                background: #fffac9;
+                color: #FCE300;
+                border-color: #FCE300; }
+            label.highlightLabel:hover:before, input.highlightchoice:focus + label.highlightLabel:before {
+                display: block;
+                width: 100%;
+                border-bottom: 3px solid #fff063;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                content: ""; }
+        input.highlightchoice:checked + label.highlightLabel, input.highlightchoice:checked + label.highlightLabel a, input.highlightchoice:checked + label.highlightLabel input.highlightchoice:checked:focus + label.highlightLabel, input.highlightchoice:checked + label.highlightLabel input.highlightchoice:checked:focus + label.highlightLabel a {
+            font-weight: bold; }
+            input.highlightchoice:checked + label.highlightLabel:before, input.highlightchoice:checked + label.highlightLabel a:before, input.highlightchoice:checked + label.highlightLabel input.highlightchoice:checked:focus + label.highlightLabel:before, input.highlightchoice:checked + label.highlightLabel input.highlightchoice:checked:focus + label.highlightLabel a:before {
+                display: block;
+                width: 100%;
+                border-bottom: 8px solid #FCE300;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                content: "";
+                z-index: -1; }
+        input.highlightchoice:checked + label.highlightLabel:after, input.highlightchoice:checked + label.highlightLabel input.highlightchoice:checked:focus + label.highlightLabel:after {
+            background: #FCE300;
+            color: #968700;
+            content: "⎼";
+            font-size: 10px;
+            font-weight: 100;
+            line-height: 15px; 
+        }
+        input.highlightchoice:checked + label.highlightLabel:hover {
+            background: #e9ecef; 
+        }
+
+        .check-answer input.highlightchoice:checked + label.highlightLabel:after {
+            content: "Clue #" attr(data-value);
+            color: #000;
+            font-size: 13px;
+            font-weight: bold;
+            width: auto;
+            padding: 2px 5px; 
+        }
+
+        input.highlightchoice.correct:checked + label.highlightLabel:before {
+            border-bottom-width: 4px;
+            border-bottom-color: #53e50e; 
+        }
+
+        input.highlightchoice.correct:checked + label.highlightLabel:after {
+            background: #53e50e;
+            color: #000;
+            content: "Found";
+            padding: 2px 5px;
+            border: 0px;
+            display: block;
+            width: auto; 
+        }
+        input.highlightchoice.incorrect:checked + label.highlightLabel {
+            background: #ebbaba;
+            color: #000; }
+            input.highlightchoice.incorrect:checked + label.highlightLabel:after {
+                background: #df9393;
+                color: #860505;
+                content: "Incorrect";
+                padding: 2px 5px;
+                border: 1px solid #a83131;
+                font-size: 11px;
+                line-height: 14px;
+                display: block; }
+            input.highlightchoice.incorrect:checked + label.highlightLabel:before {
+                border-bottom-width: 4px;
+                border-bottom-color: #dc3545; }
+        /* Add the provided CSS here, including extra styles for highlights */
+        body {
+            background-color: #ffc0cb; /* Light pink background */
+        }
+        .highlight {
+            background-color: yellow; /* Highlight selection */
+        }
+        .highlight-correct {
+            background-color: #90ee90; /* Light green for correct */
+            
+        }
+        .highlight-incorrect {
+            background-color: #ffcccb; /* Light red for incorrect */
+        }
+
+        .disabled-checkbox {
+            pointer-events: none;
+        }
+        label.highlightLabel:after {
+            content: "+"; /* Default content */
+            position: absolute;
+            right: -20px;
+            top: -10px;
+            /* other styles as needed */
+        }
+        label.correct:after {
+            background: #53e50e;
+            color: #000;
+            content: "Found";
+            padding: 2px 5px;
+            border: 0px;
+            display: block;
+            width: auto; 
+        }
+        label.incorrect:after {
+            content: "Incorrect"; /* Change content for incorrectly checked items */
+            background: #df9393; /* Red background */
+            color: #000;
+            padding: 2px 5px;
+            border: 0px;
+            display: block;
+            width: auto; 
+        }
+
+        label.not-found:after {
+            background: #ebbaba;
+            color: #000;
+            content: "NotFound";
+            padding: 2px 5px;
+            border: 1px solid #a83131;
+            font-size: 11px;
+            width: auto;
+            display: block; }
+        body {
+            background-image: url("{{ url_for('static', filename='images/Background.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding-top: 8%; /* Adds space from the top */
+            padding-bottom: 5%
+        }
+
+        .email-form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Space after the form */
+        }
+
+
+        .verify-btn {
+            background-color: #4CAF50; /* Green */
+            color: #302766;
+            border: none;
+            border-radius: 20px;
+            padding: 20px 64px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px; /* Space above the button */
+            text-align: center; /* Center the button */
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 33px;
+        }
+        .verify-btn:hover {
+            background-color: #45a049;
+        }
+
+
+        .next-btn {
+            background-color: #4CAF50; /* Green */
+            color: #302766; /* Adjust text color for better visibility */
+            border: none;
+            border-radius: 20px;
+            padding: 10px 32px; /* Reduced padding for smaller buttons */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px; /* Space around the button */
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            font-size: 18px; /* Slightly smaller font size */
+            line-height: 28px;
+            display: inline-block; /* Allows buttons to sit side by side */
+        }
+
+        .retry-btn {
+            background-color: #302766; /* Green */
+            color: #fff; /* Adjust text color for better visibility */
+            border: none;
+            border-radius: 20px;
+            padding: 10px 32px; /* Reduced padding for smaller buttons */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px; /* Space around the button */
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            font-size: 18px; /* Slightly smaller font size */
+            line-height: 28px;
+            display: inline-block; /* Allows buttons to sit side by side */
+        }
+        .message-area {
+            position: absolute;
+            width: 100%;
+            top: 20px; /* Adjust top padding */
+            text-align: center;
+        }
+
+        #message1 {
+            font-family: 'Goldman', sans-serif;
+            font-size: 40px;
+            line-height: 48px;
+            color: #FFFFFF;
+        }
+
+        #message2 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 24px;
+            line-height: 33px;
+            color: #302766;
+
+        }
+        .icon-button {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            background: #302766;
+            border-radius: 12px;
+            top: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #question-button {
+            left: calc(100% - 132px);
+        }
+
+        #speaker-button {
+            left: calc(100% - 68px);
+        }
+
+        .icon {
+            width: 100%;
+            height: auto;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal {
+            position: absolute;
+            width: 700px; /* Decreased width */
+            height: 400px; /* Decreased height */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #302766;
+            border-radius: 20px; /* Smaller radius */
+            border: 1px solid rgba(209, 67, 178, 0.5);
+            box-shadow: 0px 49.91px 79.0242px rgba(0, 0, 0, 0.14), 
+                        0px 18.7163px 95.6609px rgba(0, 0, 0, 0.12), 
+                        0px 22.8754px 31.1938px rgba(0, 0, 0, 0.2);
+            padding: 20px; /* Reduced padding */
+            box-sizing: border-box;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px; /* Closer to the top edge */
+            right: 10px; /* Closer to the right edge */
+            cursor: pointer;
+            font-size: 50px; /* Increased font size */
+            color: white;
+        }
+
+        .modal h1 {
+            font-family: 'Goldman', sans-serif;
+            font-size: 32px; /* Adjusted for new modal size */
+            color: white;
+            margin-bottom: 10px; /* Less space below header */
+        }
+
+        .modal p {
+            font-size: 20px; /* Smaller font size */
+            text-align: center;
+            line-height: 30px; /* Adjusted line height */
+            color: white;
+            padding: 0 20px; /* Added padding for text block */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center m-0">
+            <div class="message-area text-center">
+                <h1 id="message1">Message 4</h1>
+                <p id="message2">Click the parts of the message you think are suspicious.</p>
+            </div>
+            <div id="speaker-button" class="icon-button">
+                <img src="{{ url_for('static', filename='images/frame3.png') }}" alt="Speaker Icon" class="icon">
+            </div>
+            <div id="overlay" class="overlay" onclick="toggleModal();">
+                <div class="modal" onclick="event.stopPropagation();">
+                    <span class="close-button" onclick="toggleModal();">×</span>
+                    <h1>How to Play</h1>
+                    <p>Review email messages to determine if they are phishing emails. Click on items within each message if you think they are suspicious.</p>
+                </div>
+            </div>
+            <div class="icon-button" id="question-button" onclick="toggleModal();">
+                <img src="{{ url_for('static', filename='images/Frame4.png') }}" alt="Question Icon">
+            </div>
+            <div class="col-sm-16 col-md-11">
+                <div id="MAT-CARD_1" data-question="6">
+                    <div id="CARD-BODY-CONTENT_2">
+                        <div class="row">
+                            <div class="col-16">
+                                <p class="subject">
+                                    <input type="checkbox" id="item5" name="phishQuality" value="5" class="highlightchoice">
+                                    <label for="item5" class="highlightLabel" tabindex="-1">Notification Irregular Activity</label>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div id="DIV_6">
+                                    B
+                                </div>
+                                <div id="DIV_7">
+                                    <span id="SPAN_8">Bank of America</span> 
+                                    <input type="checkbox" id="item2" name="phishQuality" value="2" class="highlightchoice">
+                                    <label for="item2" class="highlightLabel" tabindex="-1">&lt;crvdgi@comcast.net&gt;</label>
+                                    <span id="SPAN_10">to <input type="checkbox" id="item8" name="phishQuality" value="8" class="highlightchoice"><label for="item8" class="highlightLabel" tabindex="-1">Undisclosed recipients;</label></span>
+                                </div>
+                            </div>
+                            <div class="col-4 column_style">
+                                <input type="checkbox" id="item10" name="phishQuality" value="10" class="highlightchoice">
+                                <label for="item10" class="highlightLabel" tabindex="-1">10/7/20 10:09 AM</label>
+                            </div>
+                        </div>
+            
+                        <div id="EMAIL-CONTENT-DROPBOX_15">
+                            <img src="{{ url_for('static', filename='images/bofa.jpg') }}" alt="Bank of America" class="ml-md-4 mt-3 img-fluid">
+                            <div class="row email_body_wrapper">
+                                <div>
+                                    <p>
+                                        <input type="checkbox" id="item3" name="phishQuality" value="3" class="highlightchoice">
+                                        <label for="item3" class="highlightLabel" tabindex="-1"><strong>Dear member:</strong></label>
+                                    </p>
+                                    <p>
+                                        We detected unusual activity on your <input type="checkbox" id="item4" name="phishQuality" value="4" class="highlightchoice">
+                                        <label for="item4" class="highlightLabel" tabindex="-1">Bank of America debit card</label> on <strong>10/04/2020</strong>.
+                                        For your protection, please verify this activity so you can continue making debit card
+                                        transactions without interruption.
+                                    </p>
+                                    <p>
+                                        <strong>Please sign in to</strong> <span class="small" style="font-family: Verdana, sans-serif;">your account</span> <strong>at</strong> 
+                                        <input type="checkbox" id="item5" name="phishQuality" value="5" class="highlightchoice">
+                                        <label for="item5" class="highlightLabel" tabindex="-1"><a href="http://bit.do/ghsdfhgsd" data-toggle="tooltip" data-placement="top" title="" data-original-title="The url leads you to http://bit.do/ghsdfhgsd">https://www.bankofamerica.com</a></label>
+                                        to review and verify your account <input type="checkbox" id="item1" name="phishQuality" value="1" class="highlightchoice">
+                                        <label for="item1" class="highlightLabel" tabindex="-1">activity,</label> After verifying your debit card transactions we will take the necessary steps to protect your account from fraud. If you do not contact us, 
+                                        <input type="checkbox" id="item7" name="phishQuality" value="7" class="highlightchoice">
+                                        <label for="item7" class="highlightLabel" tabindex="-1">certain limitations be placed on your debit card.</label>
+                                    </p>
+                                </div>
+                                <p class="text-center small mt-5">
+                                    <input type="checkbox" id="item9" name="phishQuality" value="9" class="highlightchoice">
+                                    <label for="item9" class="highlightLabel" tabindex="-1">© 2020 Bank of America Corporation. All rights reserved.</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Row justify-content-center m-0 ends -->
+        <br/><br/>
+        </div><div class="text-center button-area">
+            <type="submit" class="verify-btn" id="check-answer">Verify Suspicion</button>
+        </div>
+    </div> <!-- Container ends -->
+
+
+    <script>
+        function toggleModal() {
+            var overlay = document.getElementById('overlay');
+            overlay.style.display = overlay.style.display === 'none' ? 'block' : 'none';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const PHISHING_CLUES = {
+                'item2': true,
+                'item3': true,
+                'item1': true,
+                'item5': true,
+                'item4': false,
+                'item7': true,
+                'item10': false,
+                'item9': false
+            };
+
+            const checkboxes = document.querySelectorAll('.highlightchoice');
+            const checkAnswerButton = document.getElementById('check-answer');
+            const message1 = document.getElementById('message1');
+            const message2 = document.getElementById('message2');
+            const buttonArea = document.querySelector('.button-area');
+
+            checkAnswerButton.addEventListener('click', function() {
+                let correctCount = 0;
+                let falseChecked = 0;
+                let trueMissed = 0;
+                let verificationScore = 0;
+
+                checkboxes.forEach(function(checkbox) {
+                    const label = checkbox.nextElementSibling;
+                    label.classList.remove('correct', 'incorrect', 'not-found');
+
+                    const isPhishing = PHISHING_CLUES[checkbox.id];
+                    const isChecked = checkbox.checked;
+
+                    if (isPhishing && isChecked) {
+                        checkbox.classList.add('correct');
+                        label.classList.add('correct');
+                        correctCount++;
+                    } else if (!isPhishing && isChecked) {
+                        checkbox.classList.add('incorrect');
+                        label.classList.add('incorrect');
+                        falseChecked++;
+                    } else if (isPhishing && !isChecked) {
+                        checkbox.classList.add('not-found');
+                        label.classList.add('not-found');
+                        trueMissed++;
+                    }
+
+                    checkbox.disabled = true;
+                });
+
+                if (correctCount === Object.keys(PHISHING_CLUES).filter(key => PHISHING_CLUES[key]).length && falseChecked === 0 && trueMissed === 0) {
+                    verificationScore = 1;
+                } else if (correctCount === 0 && falseChecked > 0) {
+                    verificationScore = -1;
+                } else {
+                    verificationScore = 0;
+                }
+
+                switch (verificationScore) {
+                    case 1:
+                        message1.textContent = "Bravo!";
+                        message2.textContent = "You got them all right.";
+                        break;
+                    case 0:
+                        message1.textContent = "Good, but you can do better!";
+                        message2.textContent = "Always pay close attention to the details.";
+                        break;
+                    case -1:
+                        message1.textContent = "Oh No!";
+                        message2.textContent = "You got them all wrong.";
+                        break;
+                }
+
+                checkAnswerButton.style.display = 'none';
+
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/m5';
+
+                const scoreInput = document.createElement('input');
+                scoreInput.type = 'hidden';
+                scoreInput.name = 'verificationScore';
+                scoreInput.value = verificationScore;
+                form.appendChild(scoreInput);
+
+                if (verificationScore !== 1) {
+                    const retryButton = document.createElement('button');
+                    retryButton.type = 'button';
+                    retryButton.textContent = 'Retry';
+                    retryButton.className = 'retry-btn';
+                    retryButton.onclick = function() { window.location.reload(); };
+                    form.appendChild(retryButton);
+                }
+
+                const nextButton = document.createElement('button');
+                nextButton.type = 'submit';
+                nextButton.textContent = 'Next';
+                nextButton.className = 'next-btn';
+                form.appendChild(nextButton);
+
+                buttonArea.appendChild(form);
+            });
+        });
+    </script>
+      
+</body>
